@@ -7,4 +7,4 @@ Task IDs go from 0 to 28146, each task is 10^10 (10 billion) seeds.<br>
 
 # Example
 java -jar ssg.jar -out "C:\Users\Kludwisz\Documents\SSGoutput.txt" -threads 16 -start 0 -end 31<br>
-would find candidate seeds in the range 0 - 32 * 10^10
+would find candidate seeds in the range (0, 32 * 10^10) using 16 threads and append the results to the specified file (if the file didn't exist it would be created).
