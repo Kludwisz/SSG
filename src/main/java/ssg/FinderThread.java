@@ -2,9 +2,7 @@ package ssg;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.List;
 
-import com.seedfinding.mccore.rand.ChunkRand;
 import com.seedfinding.mccore.rand.seed.RegionSeed;
 import com.seedfinding.mccore.util.math.DistanceMetric;
 import com.seedfinding.mccore.util.pos.CPos;
@@ -12,7 +10,6 @@ import com.seedfinding.mccore.util.pos.CPos;
 public class FinderThread extends Thread {
 	private static final DistanceMetric EUSQ = DistanceMetric.EUCLIDEAN_SQ;
 	private static final DistanceMetric CHEB = DistanceMetric.CHEBYSHEV;
-	private static final ChunkRand o = new ChunkRand(); // dummy shared object for thread synchonization
 	
 	private final long bastionSalt = 30084232L;
 	private final long portalSalt = 34222645L;
@@ -20,14 +17,15 @@ public class FinderThread extends Thread {
 	private final long fortSaltNegZ = 30084232L - RegionSeed.B;
 
 	private final FastRand frand = new FastRand();
-	private final ChunkRand rand = new ChunkRand();
 	private final PortalFilter portalFilter = new PortalFilter();
 	
 	private final long startseed, endseed;
+	private final String outputFileName;
 
-	public FinderThread(long startseed, long endseed) {
+	public FinderThread(long startseed, long endseed, String outputFileName) {
 		this.startseed = startseed;
 		this.endseed = endseed;
+		this.outputFileName = outputFileName;
 	}
 	
 	@Override
@@ -78,6 +76,17 @@ public class FinderThread extends Thread {
 		if (!portalFilter.portalCanBeGood(structseed, rp))
 			return;
 		
-		System.out.println(structseed);
+		writeToFile(structseed);
+	}
+	
+	private synchronized void writeToFile(long structseed) {
+		try {
+			FileWriter fout = new FileWriter(new File(outputFileName), true);
+			fout.append(Long.toString(structseed) + '\n');
+			fout.close();
+		}
+		catch(Exception ex) {
+			System.out.println("File write failed: " + ex.getMessage());
+		}
 	}
 }

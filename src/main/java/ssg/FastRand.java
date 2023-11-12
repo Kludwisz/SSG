@@ -28,11 +28,11 @@ public class FastRand {
 		return l;
 	}
 	
-	public void setCarverSeed(long structureSeed, int chunkX, int chunkZ) {
+	/*public void setCarverSeed(long structureSeed, int chunkX, int chunkZ) {
 		this.setSeed(structureSeed);
 		long a = this.nextLong();
 		long b = this.nextLong();
 		long seed = (long) chunkX * a ^ (long) chunkZ * b ^ structureSeed;
 		this.setSeed(seed);
-	}
+	}*/
 }
